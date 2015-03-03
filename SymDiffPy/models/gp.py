@@ -51,7 +51,7 @@ class GP(GPy.core.Model):
         return self._obj
         
     def parameters_changed(self):
-        param_list = [self.X, self.X, self.sigma] + self.kernel.parameters
+        param_list = [self.X, self.X, self.sigma] + self.kernel.flattened_parameters
         self._obj, self._Kinv = self.f_obj(*param_list)
         grads = self.f_grad(*param_list)
         self.gradient[:] = np.concatenate(grads)
