@@ -54,9 +54,7 @@ class GP(GPy.core.Model):
         param_list = [self.X, self.X, self.sigma] + self.kernel.parameters
         self._obj, self._Kinv = self.f_obj(*param_list)
         grads = self.f_grad(*param_list)
-        
-        self.sigma.gradient[:] = grads[0]
-        self.kernel.gradient[:] = (np.r_[grads[1:]]).flat
+        self.gradient[:] = np.concatenate(grads)
         
     def predict(self, Xnew):
         Kx = self.kernel.K(Xnew, self.X)
