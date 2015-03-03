@@ -60,18 +60,19 @@ class GP(GPy.core.Model):
         
     def predict(self, Xnew):
         Kx = self.kernel.K(Xnew, self.X)
-        
         mu = Kx.dot(self._Kinv.dot(self.Y))
-        var = self.kernel.K(Xnew, Xnew) - Kx.dot(self._Kinv).dot(Kx.T)
+        var = self.kernel.K(Xnew, Xnew) - Kx.dot(self._Kinv).dot(Kx.T) + np.eye(Xnew.shape[0])*self.sigma
             
         return mu, var
 
-    def plot(self):
+    def plot(self, resolution=100):
         if self.input_dim == 1:
             plt.scatter(self.X,self.Y,color='k',marker='x')
-            Xpred = np.linspace(self.X.min(), self.X.max(), 100)[:, None]
+            mi, ma = self.X.min(), self.X.max()
+            ten_perc = .1*(ma-mi)
+            Xpred = np.linspace(mi-ten_perc, ma+ten_perc, resolution)[:, None]
             mu, var = self.predict(Xpred)
             plt.plot(Xpred, mu, color='g', lw=1.5)
-            plt.fill_between(Xpred[:, 0], mu[:,0]+2*np.sqrt(np.diagonal(var)), mu[:,0]-2*np.sqrt(np.diagonal(var)), color='k', alpha=.2)
+            plt.fill_between(Xpred[:, 0], mu[:,0]+2*np.sqrt(np.diagonal(var)), mu[:,0]-2*np.sqrt(np.diagonal(var)), color='k', alpha=.1)
         else:
             raise NotImplementedError("Only one dim plots allowed")

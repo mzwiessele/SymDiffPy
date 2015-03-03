@@ -14,8 +14,6 @@ class RBF(GPy.core.Parameterized):
             else:
                 lengthscale = 1.
         self.lengthscale = GPy.Param('lengthscale', lengthscale)
-        print self.lengthscale.values
-        print self.alpha.values
         self.link_parameters(self.alpha, self.lengthscale)
         
         self.T_alpha = T.dvector('alpha')
