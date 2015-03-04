@@ -3,7 +3,7 @@ import theano.tensor as T, theano
 from theano.tensor import slinalg, nlinalg
 
 class Linear(GPy.core.Parameterized):
-    def __init__(self, input_dim, relevance=None ARD=False, name='linear'):
+    def __init__(self, input_dim, relevance=None, ARD=False, name='linear'):
         super(Linear, self).__init__(name=name)
         
         self.input_dim = input_dim
